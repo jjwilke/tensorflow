@@ -1014,6 +1014,7 @@ PjRtFuture<Status> TfrtCpuBuffer::ToLiteral(MutableLiteralBase* literal) {
 // multiple pmap replicas to the same CPU device for multi-CPU pmap testing.
 StatusOr<std::unique_ptr<PjRtBuffer>> TfrtCpuBuffer::CopyToDevice(
     PjRtDevice* dst_device) {
+  std::cout << "TfrtCpuBuffer copy to device " << dst_device->id() << std::endl;
   tensorflow::profiler::TraceMe traceme("TfrtCpuBuffer::CopyToDevice");
   // TODO(zhangqiaorjc): Remove this restriction after removing the test that
   // explicitly asserts this.
@@ -1615,6 +1616,7 @@ TfrtCpuExecutable::Execute(
     absl::Span<const std::vector<PjRtBuffer*>> argument_handles,
     const ExecuteOptions& options,
     std::optional<std::vector<PjRtFuture<Status>>>& returned_futures) {
+  std::cout << "TfrtCpuExecutable::Execute" << std::endl;
   tensorflow::profiler::TraceMe traceme("TfrtCpuExecutable::Execute");
   if (device_assignment_ == nullptr) {
     return InvalidArgument("Execute expects a non-null device_assignment");

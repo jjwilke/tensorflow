@@ -188,6 +188,7 @@ PyBuffer::object PyBuffer::Clone() const {
 
 StatusOr<py::object> PyBuffer::CopyToDevice(
     const ClientAndPtr<PjRtDevice>& dst_device) const {
+  std::cout << "PyBuffer CopyToDevice" << std::endl;
   CHECK(dst_device.get() != nullptr);
   auto transfer_guard_formatter = [this, &dst_device] {
     auto shape = py::cast<std::string>(py::str(python_shape()));
@@ -649,6 +650,7 @@ Status PyBuffer::RegisterTypes(py::module& m) {
       });
   type.attr("copy_to_device") = py::cpp_function(
       [](PyBuffer::object self, const ClientAndPtr<PjRtDevice>& dst_device) {
+        std::cout << "Let's copy " << self.buf() << " to device" << std::endl;
         return self.buf()->CopyToDevice(dst_device);
       },
       py::is_method(type));

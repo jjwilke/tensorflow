@@ -577,8 +577,10 @@ void PjRtStreamExecutorBuffer::ScopedHold::AddToInput(
     se::DeviceMemoryAllocator* allocator) const {
   CHECK(ok());
   if (type_ == kDonation) {
+    std::cout << "PjRtStreamExecutorBuffer::ScopedHold::AddToInputAsDonated" << std::endl;
     buffer()->AddToInputAsDonated(iterator, end, execution_input, allocator);
   } else {
+    std::cout << "PjRtStreamExecutorBuffer::ScopedHold::AddToInputAsImmutable" << std::endl;
     CHECK_EQ(type_, kUsage);
     buffer()->AddToInputAsImmutable(iterator, end);
   }
@@ -1478,6 +1480,7 @@ StatusOr<std::unique_ptr<PjRtBuffer>> PjRtStreamExecutorBuffer::CopyToDevice(
     PjRtDevice* dst_device) {
   tensorflow::profiler::TraceMe traceme(
       "PjRtStreamExecutorBuffer::CopyToDevice");
+  std::cout << "PjRtStreamExecutorBuffer::CopyToDevice -> " << dst_device->id() << std::endl;
   VLOG(1) << "PjRtStreamExecutorBuffer::CopyToDevice";
   if (dst_device == device_) {
     return InvalidArgument(
@@ -2114,8 +2117,9 @@ PjRtStreamExecutorExecutable::ExecuteHelper(
                            ->device_ordinal();
   tensorflow::profiler::TraceMe traceme(
       "PjRtStreamExecutorExecutable::ExecuteHelper");
-  VLOG(1) << "Replica " << replica << ", partition " << partition
-          << " mapped to device ordinal for execution: " << device_ordinal;
+  std::cout << "Replica " << replica << ", partition " << partition
+          << " mapped to device ordinal for execution: " << device_ordinal
+          << std::endl;
 
   // SPMD sharding produces a single executable for multiple partitions.
   int executable_idx = executables_.size() > 1 ? partition : 0;
@@ -2196,6 +2200,7 @@ PjRtStreamExecutorExecutable::Execute(
     absl::Span<const std::vector<PjRtBuffer*>> argument_handles,
     const ExecuteOptions& options,
     std::optional<std::vector<PjRtFuture<Status>>>& returned_futures) {
+  std::cout << "PjRtStreamExecutorExecutable::Execute" << std::endl;
   if (device_assignment_ == nullptr) {
     return InvalidArgument("Execute expects a non-null device_assignment");
   }

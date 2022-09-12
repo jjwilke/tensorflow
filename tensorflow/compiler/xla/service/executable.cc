@@ -81,6 +81,7 @@ StatusOr<ScopedShapedBuffer> Executable::ExecuteOnStream(
     const ServiceExecutableRunOptions* run_options,
     absl::Span<const ShapedBuffer* const> arguments,
     HloExecutionProfile* hlo_execution_profile) {
+  std::cout << "Executable::ExecuteOnStream with ShapedBuffer" << std::endl;
   StatusOr<ScopedShapedBuffer> result =
       ExecuteAsyncOnStream(run_options, arguments, hlo_execution_profile);
   Status blocking_status = run_options->stream()->BlockHostUntilDone();
@@ -103,6 +104,7 @@ StatusOr<ScopedShapedBuffer> Executable::ExecuteAsyncOnStream(
     const ServiceExecutableRunOptions* run_options,
     absl::Span<const ShapedBuffer* const> arguments,
     HloExecutionProfile* hlo_execution_profile) {
+  std::cout << "Executable::ExecuteAsyncOnStream with ShapedBuffer" << std::endl;
   std::vector<ExecutionInput> args;
   args.reserve(arguments.size());
   for (const ShapedBuffer* arg : arguments) {
@@ -118,6 +120,7 @@ StatusOr<ExecutionOutput> Executable::ExecuteOnStream(
     const ServiceExecutableRunOptions* run_options,
     std::vector<ExecutionInput> arguments,
     HloExecutionProfile* hlo_execution_profile) {
+  std::cout << "Executable::ExecuteOnStream with ExecutionInput" << std::endl;
   StatusOr<ExecutionOutput> result = ExecuteAsyncOnStream(
       run_options, std::move(arguments), hlo_execution_profile);
   Status blocking_status = run_options->stream()->BlockHostUntilDone();
@@ -130,7 +133,7 @@ StatusOr<std::vector<ScopedShapedBuffer>> Executable::ExecuteOnStreams(
     absl::Span<const ServiceExecutableRunOptions> run_options,
     absl::Span<const absl::Span<const ShapedBuffer* const>> arguments) {
   TF_RET_CHECK(run_options.size() == arguments.size());
-
+  std::cout << "Executable::ExecuteOnStreams with ShapedBuffer" << std::endl;
   std::vector<ScopedShapedBuffer> return_values;
   return_values.reserve(run_options.size());
 
@@ -161,6 +164,7 @@ StatusOr<std::vector<ScopedShapedBuffer>> Executable::ExecuteOnStreams(
 StatusOr<ScopedShapedBuffer> Executable::ExecuteOnStreamWrapper(
     const ServiceExecutableRunOptions* run_options,
     absl::Span<const ShapedBuffer* const> arguments) {
+  std::cout << "Executable::ExecuteOnStreamWrapper with ShapedBuffer" << std::endl;
   StatusOr<ScopedShapedBuffer> result =
       ExecuteAsyncOnStreamWrapper(run_options, arguments);
   Status block_status = run_options->stream()->BlockHostUntilDone();
@@ -172,6 +176,7 @@ StatusOr<ScopedShapedBuffer> Executable::ExecuteOnStreamWrapper(
 StatusOr<ExecutionOutput> Executable::ExecuteOnStreamWrapper(
     const ServiceExecutableRunOptions* run_options,
     std::vector<ExecutionInput> arguments) {
+  std::cout << "Executable::ExecuteOnStreamWrapper with ExecutionInput" << std::endl;
   StatusOr<ExecutionOutput> result =
       ExecuteAsyncOnStreamWrapper(run_options, std::move(arguments));
   Status block_status = run_options->stream()->BlockHostUntilDone();

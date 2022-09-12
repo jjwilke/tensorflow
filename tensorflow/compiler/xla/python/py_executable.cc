@@ -318,6 +318,7 @@ ExecuteShardedOnLocalDevicesInternal(
                           return ArgAdapter::GetPjRtBuffer(arg, computation);
                         });
     }
+    std::cout << "executable->Execute(...)" << std::endl;
     TF_ASSIGN_OR_RETURN(output_buffers, executable->Execute(arg_buffers, opts,
                                                             returned_futures));
 

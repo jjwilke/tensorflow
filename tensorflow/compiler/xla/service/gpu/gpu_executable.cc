@@ -468,9 +468,11 @@ StatusOr<se::DeviceMemoryBase> GpuExecutable::BufferForAllocation(
     se::DeviceMemoryBase registered_buffer = [&] {
       if (auto unowned_shapedbuffers =
               std::get_if<absl::Span<const ShapedBuffer* const>>(&arguments)) {
+        std::cout << "Allocating ShapeBuffer for arg_idx=" << arg_idx << std::endl;
         return (*unowned_shapedbuffers)[param_no]->buffers().element(
             allocation.param_shape_index());
       } else {
+        std::cout << "Allocating ExecutionInput for arg_idx=" << arg_idx << std::endl;
         return std::get<absl::Span<ExecutionInput>>(arguments)[param_no]
             .Buffer(allocation.param_shape_index())
             .AsDeviceMemoryBase();
@@ -557,6 +559,7 @@ StatusOr<ExecutionOutput> GpuExecutable::ExecuteAsyncOnStream(
     const ServiceExecutableRunOptions* run_options,
     std::vector<ExecutionInput> arguments,
     HloExecutionProfile* hlo_execution_profile) {
+  std::cout << "GpuExecutable::ExecuteAsyncOnStream with ExecutionInput" << std::endl;
   return ExecuteAsyncOnStreamImpl(run_options, absl::MakeSpan(arguments));
 }
 
@@ -684,6 +687,7 @@ static Status ExecuteJitRt(const std::string& module_name,
 StatusOr<ExecutionOutput> GpuExecutable::ExecuteAsyncOnStreamImpl(
     const ServiceExecutableRunOptions* run_options,
     VariantArguments arguments) {
+  std::cout << "Let's execute this thing!" << std::endl;
   XLA_SCOPED_LOGGING_TIMER(absl::StrCat(
       "GpuExecutable::ExecuteAsyncOnStreamImpl(", module_name_, ")"));
   se::DeviceMemoryAllocator* const memory_allocator = run_options->allocator();
@@ -845,6 +849,7 @@ StatusOr<ExecutionOutput> GpuExecutable::ExecuteAsyncOnStreamImpl(
 Status GpuExecutable::ExecuteThunksOrJitRt(
     const ServiceExecutableRunOptions* run_options,
     const BufferAllocations& buffer_allocations, bool block_host_until_done) {
+  std::cout << "Let's execute some thunks" << std::endl;
   TF_RETURN_IF_ERROR(
       CheckCompatibilityWithServiceExecutableRunOptions(run_options));
 

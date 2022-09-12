@@ -726,6 +726,7 @@ bool PjRtCApiBuffer::IsDeleted() {
 
 StatusOr<std::unique_ptr<PjRtBuffer>> PjRtCApiBuffer::CopyToDevice(
     PjRtDevice* dst_device) {
+  std::cout << "PjRtCApiBuffer::CopyToDevice -> " << dst_device->id() << std::endl;
   if (dst_device->client() == client_) {
     PJRT_Buffer_CopyToDevice_Args args;
     args.struct_size = PJRT_Buffer_CopyToDevice_Args_STRUCT_SIZE;
