@@ -1033,9 +1033,11 @@ Status IrEmitterUnnested::EmitGemmThunk(mlir::Operation* op) {
   TF_ASSIGN_OR_RETURN(auto b, GetAllocationSlice(gemm.getB()));
   TF_ASSIGN_OR_RETURN(auto c, GetAllocationSlice(gemm.getC()));
 
+  std::string kernel_name = GetIrNameFromLoc(op->getLoc());
+
   TF_ASSIGN_OR_RETURN(GemmConfig config, GemmConfig::For(gemm));
   auto thunk =
-      std::make_unique<GemmThunk>(GetThunkInfo(op), std::move(config), a, b, c);
+      std::make_unique<GemmThunk>(GetThunkInfo(op), std::move(config), kernel_name, a, b, c);
 
   AddThunkToThunkSequence(std::move(thunk));
   return OkStatus();

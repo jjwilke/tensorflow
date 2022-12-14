@@ -30,6 +30,7 @@ class GemmThunk : public Thunk {
   // Constructs a thunk that computes "output = (lhs <dot> rhs) * alpha" using
   // BLAS gemm (alpha is stored in the instruction GemmBackendConfig).
   GemmThunk(ThunkInfo thunk_info, GemmConfig config,
+            const std::string& name,
             const BufferAllocation::Slice& lhs_buffer,
             const BufferAllocation::Slice& rhs_buffer,
             const BufferAllocation::Slice& output_buffer);
@@ -39,11 +40,17 @@ class GemmThunk : public Thunk {
 
   Status ExecuteOnStream(const ExecuteParams& params) override;
 
+  std::string ToStringExtra(int indent) const {
+    const std::string indent_str(indent * 2, ' ');
+    return absl::StrCat(indent_str, name_);
+  }
+
  private:
   const GemmConfig config_;
   const BufferAllocation::Slice lhs_buffer_;
   const BufferAllocation::Slice rhs_buffer_;
   const BufferAllocation::Slice output_buffer_;
+  std::string name_;
 };
 
 }  // namespace gpu

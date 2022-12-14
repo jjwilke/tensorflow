@@ -27,11 +27,13 @@ namespace xla {
 namespace gpu {
 
 GemmThunk::GemmThunk(ThunkInfo thunk_info, GemmConfig config,
+                     const std::string& name,
                      const BufferAllocation::Slice& lhs_buffer,
                      const BufferAllocation::Slice& rhs_buffer,
                      const BufferAllocation::Slice& output_buffer)
     : Thunk(Kind::kGemm, thunk_info),
       config_(std::move(config)),
+      name_(name),
       lhs_buffer_(lhs_buffer),
       rhs_buffer_(rhs_buffer),
       output_buffer_(output_buffer) {}
