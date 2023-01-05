@@ -52,6 +52,16 @@ class NVTXRangeTracker {
   TF_DISALLOW_COPY_AND_ASSIGN(NVTXRangeTracker);
 };
 
+class NvtxContext {
+ public:
+  NvtxContext(const std::string& name);
+
+  ~NvtxContext();
+};
+
+void NvtxEnter(const std::string& name);
+void NvtxExit();
+
 }  // namespace profiler
 }  // namespace xla
 

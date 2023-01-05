@@ -26,5 +26,23 @@ namespace profiler {
   return range_stack;
 }
 
+NvtxContext::NvtxContext(const std::string& name)
+{
+  NvtxEnter(name);
+}
+
+NvtxContext::~NvtxContext()
+{
+  NvtxExit();
+}
+
+void NvtxEnter(const std::string& name){
+  nvtxRangePush(name.c_str());
+}
+
+void NvtxExit(){
+  nvtxRangePop();
+}
+
 }  // namespace profiler
 }  // namespace xla

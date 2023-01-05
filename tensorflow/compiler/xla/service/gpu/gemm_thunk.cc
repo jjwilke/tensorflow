@@ -22,7 +22,7 @@ limitations under the License.
 #include "tensorflow/compiler/xla/status.h"
 #include "tensorflow/compiler/xla/stream_executor/device_memory.h"
 #include "tensorflow/tsl/platform/logging.h"
-
+#include "tensorflow/compiler/xla/backends/profiler/gpu/nvtx_utils.h"
 namespace xla {
 namespace gpu {
 
@@ -41,6 +41,7 @@ GemmThunk::GemmThunk(ThunkInfo thunk_info, GemmConfig config,
 Status GemmThunk::ExecuteOnStream(const ExecuteParams& params) {
   VLOG(3) << "Running GEMM thunk";
   const BufferAllocations& allocs = *params.buffer_allocations;
+  xla::profiler::NvtxContext nvtx(name_);
   return RunGemm(config_, allocs.GetDeviceAddress(lhs_buffer_),
                  allocs.GetDeviceAddress(rhs_buffer_),
                  allocs.GetDeviceAddress(output_buffer_), params.stream);

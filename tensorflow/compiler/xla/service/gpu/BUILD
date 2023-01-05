@@ -897,6 +897,7 @@ cc_library(
         "//tensorflow/compiler/xla/stream_executor:device_memory",
         "//tensorflow/compiler/xla/stream_executor:stream_executor_headers",
         "//tensorflow/tsl/platform:logging",
+        "//tensorflow/compiler/xla/backends/profiler/gpu:nvtx_utils",
     ],
 )
 
